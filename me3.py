@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Mock Extractor 3
 
@@ -20,7 +22,10 @@ if __name__ == '__main__':
     with open(csv_filename, "r") as in_file:
         for one_row in in_file.readlines():
             num_rows += 1
-            with open(str(num_rows) + '.txt', 'w') as out_file:
+            out_filename = str(num_rows) + '.txt'
+            if sys.argv[1:]:
+                out_filename = os.path.dirname(sys.argv[1]) + '/' + out_filename
+            with open(out_filename, 'w') as out_file:
                 out_file.write(one_row)
 
     print("Found " + str(num_rows) + " rows in file " + csv_filename)

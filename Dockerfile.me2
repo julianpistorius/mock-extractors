@@ -1,0 +1,17 @@
+FROM ubuntu:18.04
+LABEL maintainer="Chris Schnaufer <schnaufer@email.arizona.edu>"
+
+RUN useradd -u 49044 extractor \
+    && mkdir /home/extractor
+
+RUN chown -R extractor /home/extractor \
+    && chgrp -R extractor /home/extractor 
+
+RUN apt update && \
+    apt install -y python3
+
+COPY me2.py /home/extractor
+
+WORKDIR /home/extractor
+ENTRYPOINT ["/home/extractor/me2.py"]
+CMD [""]

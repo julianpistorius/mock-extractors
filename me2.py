@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Mock Extractor 2
 
@@ -23,7 +25,10 @@ if __name__ == '__main__':
 
     # Scan for .dmy files
     num_found = 0
-    with open('testing.csv', 'w') as out_file:
+    out_filename = 'testing.csv'
+    if sys.argv[1:]:
+        out_filename = sys.argv[1].rstrip('/') + '/' + out_filename
+    with open(out_filename, 'w') as out_file:
         for item in os.listdir('.'):
             if os.path.isfile(item) and item.endswith('.dmy'):
                 num_found += 1

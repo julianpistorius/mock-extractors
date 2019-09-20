@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Mock Extractor 4
 
@@ -20,4 +22,5 @@ if __name__ == '__main__':
         raise RuntimeError("Specified file does not exist: " + sys.argv[1])
 
     with open(sys.argv[1], 'r') as in_file:
-        print(in_file.readlines())
+        for line in in_file.readlines():
+            print(line.rstrip("\n"))
