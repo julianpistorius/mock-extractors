@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     csv_filename = sys.argv[1] if len(sys.argv) > 1 else 'testing.csv'
     if not os.path.exists(csv_filename):
-        print("Unable to find csv file: " + csv_filename)
+        raise RuntimeError("Unable to find csv file: " + csv_filename)
 
     num_rows = 0
     with open(csv_filename, "r") as in_file:
@@ -24,4 +24,3 @@ if __name__ == '__main__':
                 out_file.write(one_row)
 
     print("Found " + str(num_rows) + " rows in file " + csv_filename)
-    
