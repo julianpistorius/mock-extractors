@@ -1,0 +1,66 @@
+{
+  "define": {
+    "DOCKER_MOUNT": "/Users/johndoe/mock-extractors/output",
+    "EXTRACTOR_01_OUTPUT_DIR": "./output/me1/",
+    "EXTRACTOR_02_OUTPUT_DIR": "./output/me2/",
+    "EXTRACTOR_03_OUTPUT_DIR": "./output/me3/",
+    "EXTRACTOR_04_OUTPUT_DIR": "./output/me4/",
+    "EXTRACTOR_05_OUTPUT_DIR": "./output/me5/",
+    "EXTRACTOR_02_OUTPUT_FILE": EXTRACTOR_02_OUTPUT_DIR + "testing.csv",
+    "EXTRACTOR_04_OUTPUT_FILE": EXTRACTOR_04_OUTPUT_DIR + "report.csv",
+    "EXTRACTOR_01": "./me1.py",
+    "EXTRACTOR_02": "./me2.py",
+    "EXTRACTOR_02_DOCKER": "test/me2:latest",
+    "EXTRACTOR_03": "./me3.py",
+    "EXTRACTOR_04": "./me4.py",
+    "EXTRACTOR_05": "./me5.py",
+    "COUNT": 20
+  },
+  "rules": [
+    {
+      "command": "mkdir -p " + EXTRACTOR_01_OUTPUT_DIR + join( [ " && " + EXTRACTOR_01 + " " + EXTRACTOR_01_OUTPUT_DIR + " " + x for x in range(COUNT) ]),
+      "inputs": [EXTRACTOR_01],
+      "outputs": [EXTRACTOR_01_OUTPUT_DIR]
+    },
+    {
+      "command": "mkdir -p " + EXTRACTOR_02_OUTPUT_DIR,
+      "outputs": [EXTRACTOR_02_OUTPUT_DIR],
+      "inputs": []
+    },
+    {
+      "command": "docker run --rm --mount 'type=bind,source=" + DOCKER_MOUNT + ",target=/home/extractor/output' " + EXTRACTOR_02_DOCKER + " " + EXTRACTOR_01_OUTPUT_DIR + " " + EXTRACTOR_02_OUTPUT_DIR,
+      "outputs": [EXTRACTOR_02_OUTPUT_FILE],
+      "inputs": [EXTRACTOR_02, EXTRACTOR_01_OUTPUT_DIR, EXTRACTOR_02_OUTPUT_DIR]
+    },
+    {
+      "command": "mkdir -p " + EXTRACTOR_03_OUTPUT_DIR,
+      "outputs": [EXTRACTOR_03_OUTPUT_DIR],
+      "inputs": []
+    },
+    {
+      "command": EXTRACTOR_03 + " " + EXTRACTOR_02_OUTPUT_FILE + " " + EXTRACTOR_03_OUTPUT_DIR,
+      "outputs": [ EXTRACTOR_03_OUTPUT_DIR + x + ".txt" for x in range(COUNT) ],
+      "inputs": [EXTRACTOR_03, EXTRACTOR_02_OUTPUT_FILE, EXTRACTOR_03_OUTPUT_DIR]
+    },
+    {
+      "command": "mkdir -p " + EXTRACTOR_04_OUTPUT_DIR,
+      "outputs": [EXTRACTOR_04_OUTPUT_DIR],
+      "inputs": []
+    },
+    {
+      "command": EXTRACTOR_04 + " " + EXTRACTOR_03_OUTPUT_DIR + " " + EXTRACTOR_04_OUTPUT_DIR,
+      "outputs": [ EXTRACTOR_04_OUTPUT_FILE ],
+      "inputs": [EXTRACTOR_04, EXTRACTOR_03_OUTPUT_DIR, EXTRACTOR_04_OUTPUT_DIR] + [ EXTRACTOR_03_OUTPUT_DIR + x + ".txt" for x in range(COUNT) ]
+    },
+    {
+      "command": "mkdir -p " + EXTRACTOR_05_OUTPUT_DIR,
+      "outputs": [EXTRACTOR_05_OUTPUT_DIR],
+      "inputs": []
+    },
+    {
+      "command": EXTRACTOR_05 + " " + EXTRACTOR_03_OUTPUT_DIR + x + ".txt " + EXTRACTOR_05_OUTPUT_DIR,
+      "outputs": [ EXTRACTOR_05_OUTPUT_DIR + x + ".txt.copy" ],
+      "inputs": [EXTRACTOR_04, EXTRACTOR_03_OUTPUT_DIR, EXTRACTOR_04_OUTPUT_DIR] + [ EXTRACTOR_03_OUTPUT_DIR + x + ".txt"]
+    } for x in range(COUNT)
+  ]
+}
