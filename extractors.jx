@@ -1,6 +1,5 @@
 {
   "define": {
-    "DOCKER_MOUNT": "/Users/johndoe/mock-extractors/output",
     "EXTRACTOR_01_OUTPUT_DIR": "./output/me1/",
     "EXTRACTOR_02_OUTPUT_DIR": "./output/me2/",
     "EXTRACTOR_03_OUTPUT_DIR": "./output/me3/",
@@ -28,7 +27,7 @@
       "inputs": []
     },
     {
-      "command": "docker run --rm --mount 'type=bind,source=" + DOCKER_MOUNT + ",target=/home/extractor/output' " + EXTRACTOR_02_DOCKER + " " + EXTRACTOR_01_OUTPUT_DIR + " " + EXTRACTOR_02_OUTPUT_DIR,
+      "command": EXTRACTOR_02 + " " + EXTRACTOR_01_OUTPUT_DIR + " " + EXTRACTOR_02_OUTPUT_DIR,
       "outputs": [EXTRACTOR_02_OUTPUT_FILE],
       "inputs": [EXTRACTOR_02, EXTRACTOR_01_OUTPUT_DIR, EXTRACTOR_02_OUTPUT_DIR]
     },
