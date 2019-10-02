@@ -13,7 +13,7 @@
     "EXTRACTOR_03": "./me3.py",
     "EXTRACTOR_04": "./me4.py",
     "EXTRACTOR_05": "./me5.py",
-    "COUNT": 20
+    "COUNT": 100
   },
   "rules": [
     {
